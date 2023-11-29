@@ -25,7 +25,6 @@ const HomeScreen = () => {
     markedDates: null,
     minDate: null,
     maxDate: null,
-    count: 0,
     modalVisible: false,
     maxDate: null,
     holidaysList: [
@@ -46,32 +45,7 @@ const HomeScreen = () => {
         title: 'New Year',
       },
     ],
-    arrays: {
-      fromDate: '2023-11-06',
-      toDate: '2023-11-10',
-      reason: 'I am taking 5 days of leave.',
-    },
   });
-
-  // Debounce function
-  const debounce = (func, delay) => {
-    let timeoutId;
-    return function (...args) {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => func(...args), delay);
-    };
-  };
-
-  // Handler for onVisibleMonthsChange
-  const handleVisibleMonthsChange = useCallback(
-    debounce(months => {
-      setCommObj(prev => ({
-        ...prev,
-        selectadDate: months[0]?.dateString,
-      }));
-    }, 20),
-    [],
-  );
 
   // initially select today's date
   useEffect(() => {
@@ -85,6 +59,30 @@ const HomeScreen = () => {
       changedYear: moment(formattedDate).format('YYYY'),
     }));
   }, []);
+
+  // Debounce function
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return function (...args) {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func(...args), delay);
+    };
+  };
+
+  // Handler for onVisibleMonthsChange
+  const handleVisibleMonthsChange = useCallback(
+    debounce(months => {
+      console.log(
+        moment(commObj.selectadDate).format('MMM'),
+        moment(months[0].dateString).format('MMM'),
+      );
+      setCommObj(prev => ({
+        ...prev,
+        selectadDate: months[0]?.dateString,
+      }));
+    }, 20),
+    [],
+  );
 
   useEffect(() => {
     isFocused && leaveDataHanlder();
@@ -146,8 +144,12 @@ const HomeScreen = () => {
     </TouchableWithoutFeedback>
   );
 
+  // dynamic min and max dates logic
   useEffect(() => {
-    // dynamic min and max dates logic
+    minMaxDateHandler();
+  }, []);
+
+  function minMaxDateHandler() {
     let todayDate = moment(new Date()).format('YYYY-MM-DD');
     const endMonth = moment().month('March').format('MM');
     const startMonth = moment().month('April').format('MM');
@@ -171,12 +173,11 @@ const HomeScreen = () => {
         maxDate: `${year}-${endMonth}-31`,
       }));
     }
-  }, []);
+  }
 
   useEffect(() => {
     console.log('Home-commObj------->', commObj);
   }, [commObj]);
-
   return (
     <SafeAreaView
       style={{
@@ -195,7 +196,11 @@ const HomeScreen = () => {
             initialDate={commObj.selectadDate}
             minDate={commObj.minDate}
             maxDate={commObj.maxDate}
+            // dayComponent={({date, state}) => (
+            //   <CustomDayComponent date={date} state={state} />
+            // )}
             dayComponent={({date, state}) => {
+              console.log('dateString------>', date);
               let marked = false;
               let start = false;
               let end = false;
