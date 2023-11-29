@@ -7,10 +7,10 @@ import {
 } from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {Calendar} from 'react-native-calendars';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment/moment';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const HomeScreen = () => {
   const customNavigation = useNavigation();
@@ -116,7 +116,7 @@ const HomeScreen = () => {
   };
 
   const leaveApplyHandler = date => {
-    customNavigation.navigate('toptab', {
+    customNavigation.navigate('applyLeave', {
       date: date.dateString,
       holidaysList: commObj.holidaysList,
       minDate: commObj.minDate,
@@ -317,14 +317,6 @@ const HomeScreen = () => {
             }
             renderHeader={customHeader}
             enableSwipeMonths={true}
-            // onMonthChange={month => {
-            //   if (commObj.selectadDate != month.dateString) {
-            // setCommObj(prev => ({
-            //   ...prev,
-            //   selectadDate: month.dateString,
-            // }));
-            //   }
-            // }}
             onVisibleMonthsChange={handleVisibleMonthsChange}
           />
         </View>
