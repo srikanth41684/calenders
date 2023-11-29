@@ -7,10 +7,10 @@ import {
 } from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {Calendar} from 'react-native-calendars';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment/moment';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 const HomeScreen = () => {
   const customNavigation = useNavigation();
