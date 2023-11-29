@@ -31,7 +31,7 @@ const BottomTabNav = () => {
             <Icon
               name="home"
               size={25}
-              color={focused ? 'red' : 'gray'}
+              color={focused ? '#000000' : 'gray'}
               style={
                 {
                   // paddingHorizontal: 10,
@@ -52,7 +52,7 @@ const BottomTabNav = () => {
             <Icon
               name="user"
               size={25}
-              color={focused ? 'red' : 'gray'}
+              color={focused ? '#000000' : 'gray'}
               style={
                 {
                   // paddingHorizontal: 10,
