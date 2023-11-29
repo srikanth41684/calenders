@@ -1,11 +1,24 @@
-import {View, Text} from 'react-native';
 import React from 'react';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import HomeScreen from '../main/screens/HomeScreen';
+import ProfileScreen from '../main/screens/ProfileScreen';
+
+const BottomTab = createBottomTabNavigator();
 
 const BottomTabNav = () => {
   return (
-    <View>
-      <Text>BottomTabNav</Text>
-    </View>
+    <BottomTab.Navigator>
+      <BottomTab.Screen
+        name="home"
+        component={HomeScreen}
+        options={{headerShown: false}}
+      />
+      <BottomTab.Screen
+        name="profile"
+        component={ProfileScreen}
+        options={{headerShown: false}}
+      />
+    </BottomTab.Navigator>
   );
 };
 
