@@ -6,14 +6,16 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import moment from 'moment';
 import DatePicker from 'react-native-date-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import {AppContext} from '../../context/AppContext';
 
 const ApplyLeaveScreen = props => {
   const customNavigation = useNavigation();
+  const {globalData} = useContext(AppContext);
   const [commObj, setCommObj] = useState({
     fromDate: new Date(props.route.params.date),
     toDate: new Date(props.route.params.date),
@@ -22,7 +24,7 @@ const ApplyLeaveScreen = props => {
     toDatePicker: false,
     numberOfDays: 0,
     leaveStartDates: null,
-    holidaysList: props.route.params.holidaysList,
+    // holidaysList: props.route.params.holidaysList,
     maxDate: null,
     leaveData: null,
   });
@@ -97,7 +99,7 @@ const ApplyLeaveScreen = props => {
 
     let newArr = [];
     let dates = [];
-    commObj.holidaysList.forEach(res => {
+    globalData.holidaysList.forEach(res => {
       dates.push(res.date);
     });
     if (resultDates) {
@@ -342,8 +344,8 @@ const ApplyLeaveScreen = props => {
             modal
             mode="date"
             date={commObj.fromDate}
-            minimumDate={new Date(props.route.params.minDate)}
-            maximumDate={new Date(props.route.params.maxDate)}
+            minimumDate={new Date(globalData.minDate)}
+            maximumDate={new Date(globalData.maxDate)}
             open={commObj.formDatePicker}
             title="Select Start Date"
             onConfirm={date => {
@@ -376,7 +378,7 @@ const ApplyLeaveScreen = props => {
                       .subtract(1, 'days')
                       .format('YYYY-MM-DD'),
                   )
-                : new Date(props.route.params.maxDate)
+                : new Date(globalData.maxDate)
             }
             minimumDate={
               commObj.fromDate <= commObj.toDate ? commObj.fromDate : null
