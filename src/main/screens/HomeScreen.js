@@ -6,16 +6,18 @@ import {
   Modal,
   FlatList,
 } from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {Calendar} from 'react-native-calendars';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment/moment';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AppContext} from '../../context/AppContext';
 
 const HomeScreen = () => {
   const customNavigation = useNavigation();
   const isFocused = useIsFocused();
+  const {globalData} = useContext(AppContext);
   const [commObj, setCommObj] = useState({
     todayDate: null,
     months: moment.months(),
@@ -24,28 +26,28 @@ const HomeScreen = () => {
     changedYear: null,
     dataInfo: null,
     markedDates: null,
-    minDate: null,
-    maxDate: null,
     modalVisible: false,
-    maxDate: null,
-    holidaysList: [
-      {
-        date: '2023-11-14',
-        title: 'Holiday1',
-      },
-      {
-        date: '2023-11-27',
-        title: 'Holiday2',
-      },
-      {
-        date: '2023-12-06',
-        title: 'Holiday3',
-      },
-      {
-        date: '2024-01-01',
-        title: 'New Year',
-      },
-    ],
+    // minDate: null,
+    // maxDate: null,
+    // maxDate: null,
+    // holidaysList: [
+    //   {
+    //     date: '2023-11-14',
+    //     title: 'Holiday1',
+    //   },
+    //   {
+    //     date: '2023-11-27',
+    //     title: 'Holiday2',
+    //   },
+    //   {
+    //     date: '2023-12-06',
+    //     title: 'Holiday3',
+    //   },
+    //   {
+    //     date: '2024-01-01',
+    //     title: 'New Year',
+    //   },
+    // ],
   });
 
   // initially select today's date
@@ -113,9 +115,9 @@ const HomeScreen = () => {
   const leaveApplyHandler = date => {
     customNavigation.navigate('applyLeave', {
       date: date.dateString,
-      holidaysList: commObj.holidaysList,
-      minDate: commObj.minDate,
-      maxDate: commObj.maxDate,
+      // holidaysList: commObj.holidaysList,
+      // minDate: commObj.minDate,
+      // maxDate: commObj.maxDate,
     });
   };
 
@@ -142,35 +144,35 @@ const HomeScreen = () => {
   );
 
   // dynamic min and max dates logic
-  useEffect(() => {
-    minMaxDateHandler();
-  }, []);
+  // useEffect(() => {
+  //   minMaxDateHandler();
+  // }, []);
 
-  function minMaxDateHandler() {
-    let todayDate = moment(new Date()).format('YYYY-MM-DD');
-    const endMonth = moment().month('March').format('MM');
-    const startMonth = moment().month('April').format('MM');
+  // function minMaxDateHandler() {
+  //   let todayDate = moment(new Date()).format('YYYY-MM-DD');
+  //   const endMonth = moment().month('March').format('MM');
+  //   const startMonth = moment().month('April').format('MM');
 
-    if (moment(todayDate).format('MM') >= startMonth) {
-      let year = moment(todayDate).format('YYYY');
-      let year2 = moment(todayDate).add(1, 'year').format('YYYY');
-      setCommObj(prev => ({
-        ...prev,
-        minDate: `${year}-${startMonth}-01`,
-        maxDate: `${year2}-${endMonth}-31`,
-      }));
-    }
+  //   if (moment(todayDate).format('MM') >= startMonth) {
+  //     let year = moment(todayDate).format('YYYY');
+  //     let year2 = moment(todayDate).add(1, 'year').format('YYYY');
+  //     setCommObj(prev => ({
+  //       ...prev,
+  //       minDate: `${year}-${startMonth}-01`,
+  //       maxDate: `${year2}-${endMonth}-31`,
+  //     }));
+  //   }
 
-    if (endMonth >= moment(todayDate).format('MM')) {
-      let year = moment(todayDate).format('YYYY');
-      let year2 = moment(todayDate).subtract(1, 'year').format('YYYY');
-      setCommObj(prev => ({
-        ...prev,
-        minDate: `${year2}-${startMonth}-01`,
-        maxDate: `${year}-${endMonth}-31`,
-      }));
-    }
-  }
+  //   if (endMonth >= moment(todayDate).format('MM')) {
+  //     let year = moment(todayDate).format('YYYY');
+  //     let year2 = moment(todayDate).subtract(1, 'year').format('YYYY');
+  //     setCommObj(prev => ({
+  //       ...prev,
+  //       minDate: `${year2}-${startMonth}-01`,
+  //       maxDate: `${year}-${endMonth}-31`,
+  //     }));
+  //   }
+  // }
 
   useEffect(() => {
     console.log('Home-commObj------->', commObj);
@@ -191,8 +193,8 @@ const HomeScreen = () => {
           }}>
           <Calendar
             initialDate={commObj.selectadDate}
-            minDate={commObj.minDate}
-            maxDate={commObj.maxDate}
+            minDate={globalData.minDate}
+            maxDate={globalData.maxDate}
             // dayComponent={({date, state}) => (
             //   <CustomDayComponent date={date} state={state} />
             // )}
@@ -218,8 +220,8 @@ const HomeScreen = () => {
                   }
                 });
               }
-              if (commObj.holidaysList) {
-                commObj.holidaysList.forEach(item => {
+              if (globalData.holidaysList) {
+                globalData.holidaysList.forEach(item => {
                   if (item.date === date.dateString) {
                     holiday = true;
                   }
