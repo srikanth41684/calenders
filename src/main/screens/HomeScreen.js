@@ -69,27 +69,44 @@ const HomeScreen = () => {
   const leaveDataHanlder = async () => {
     let leaveData = await AsyncStorage.getItem('apply-leave');
     let data = JSON.parse(leaveData);
-    let arr = [];
     if (data) {
-      setCommObj(prev => ({
-        ...prev,
-        markedDates: data,
-      }));
-      data.filter(item => {
-        if (
+      let arr = data.filter(
+        item =>
           moment(item.fromDate).format('MM') ===
             moment(commObj.selectadDate).format('MM') &&
-          moment(item.fromDate).year() === moment(commObj.selectadDate).year()
-        ) {
-          arr.push(item);
-        }
-      });
+          moment(item.fromDate).year() === moment(commObj.selectadDate).year(),
+      );
+      setCommObj(prev => ({
+        ...prev,
+        dataInfo: arr,
+      }));
     }
-    setCommObj(prev => ({
-      ...prev,
-      dataInfo: arr,
-    }));
   };
+
+  // const leaveDataHanlder = async () => {
+  //   let leaveData = await AsyncStorage.getItem('apply-leave');
+  //   let data = JSON.parse(leaveData);
+  //   let arr = [];
+  //   if (data) {
+  //     setCommObj(prev => ({
+  //       ...prev,
+  //       markedDates: data,
+  //     }));
+  //     data.filter(item => {
+  //       if (
+  //         moment(item.fromDate).format('MM') ===
+  //           moment(commObj.selectadDate).format('MM') &&
+  //         moment(item.fromDate).year() === moment(commObj.selectadDate).year()
+  //       ) {
+  //         arr.push(item);
+  //       }
+  //     });
+  //   }
+  //   setCommObj(prev => ({
+  //     ...prev,
+  //     dataInfo: arr,
+  //   }));
+  // };
 
   const leaveApplyHandler = date => {
     customNavigation.navigate('applyLeave', {
