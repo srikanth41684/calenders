@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   TouchableWithoutFeedback,
   Modal,
+  FlatList,
 } from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {Calendar} from 'react-native-calendars';
@@ -72,10 +73,6 @@ const HomeScreen = () => {
   // Handler for onVisibleMonthsChange
   const handleVisibleMonthsChange = useCallback(
     debounce(months => {
-      console.log(
-        moment(commObj.selectadDate).format('MMM'),
-        moment(months[0].dateString).format('MMM'),
-      );
       setCommObj(prev => ({
         ...prev,
         selectadDate: months[0]?.dateString,
@@ -200,7 +197,6 @@ const HomeScreen = () => {
             //   <CustomDayComponent date={date} state={state} />
             // )}
             dayComponent={({date, state}) => {
-              console.log('dateString------>', date);
               let marked = false;
               let start = false;
               let end = false;
@@ -334,7 +330,7 @@ const HomeScreen = () => {
           }}>
           <View
             style={{
-              paddingVertical: 20,
+              paddingVertical: 10,
             }}>
             <Text
               style={{
@@ -348,37 +344,66 @@ const HomeScreen = () => {
         </TouchableWithoutFeedback>
         <View
           style={{
+            flex: 1,
             paddingTop: 10,
           }}>
-          {commObj.dataInfo &&
-            commObj.dataInfo.map((item, index) => {
-              return (
-                <View
-                  key={index}
-                  style={{
-                    paddingVertical: 10,
-                  }}>
-                  <Text
+          {commObj.dataInfo && commObj.dataInfo.length > 0 ? (
+            <FlatList
+              data={commObj.dataInfo}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{
+                gap: 15,
+                paddingBottom: 15,
+              }}
+              keyExtractor={item => item.fromDate}
+              renderItem={({item}) => {
+                return (
+                  <View
                     style={{
-                      color: '#000000',
+                      padding: 15,
+                      borderRadius: 8,
+                      backgroundColor: '#fff',
                     }}>
-                    {item.reason}
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#000000',
-                    }}>
-                    {item.fromDate} to {item.toDate}
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#000000',
-                    }}>
-                    Number of Days: {item.numberOfDays}
-                  </Text>
-                </View>
-              );
-            })}
+                    <Text
+                      style={{
+                        color: '#000000',
+                      }}>
+                      {item.reason}
+                    </Text>
+                    <Text
+                      style={{
+                        color: '#000000',
+                      }}>
+                      {item.fromDate} to {item.toDate}
+                    </Text>
+                    <Text
+                      style={{
+                        color: '#000000',
+                      }}>
+                      Number of Days: {item.numberOfDays}
+                    </Text>
+                  </View>
+                );
+              }}
+            />
+          ) : (
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                  color: '#000',
+                  lineHeight: 23,
+                }}>
+                No Leaves
+              </Text>
+            </View>
+          )}
         </View>
         <Modal
           animationType="fade"
