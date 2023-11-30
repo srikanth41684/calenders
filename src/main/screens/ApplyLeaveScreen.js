@@ -24,7 +24,6 @@ const ApplyLeaveScreen = props => {
     toDatePicker: false,
     numberOfDays: 0,
     leaveStartDates: null,
-    // holidaysList: props.route.params.holidaysList,
     maxDate: null,
     leaveData: null,
   });

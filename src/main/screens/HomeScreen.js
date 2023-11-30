@@ -27,27 +27,6 @@ const HomeScreen = () => {
     dataInfo: null,
     markedDates: null,
     modalVisible: false,
-    // minDate: null,
-    // maxDate: null,
-    // maxDate: null,
-    // holidaysList: [
-    //   {
-    //     date: '2023-11-14',
-    //     title: 'Holiday1',
-    //   },
-    //   {
-    //     date: '2023-11-27',
-    //     title: 'Holiday2',
-    //   },
-    //   {
-    //     date: '2023-12-06',
-    //     title: 'Holiday3',
-    //   },
-    //   {
-    //     date: '2024-01-01',
-    //     title: 'New Year',
-    //   },
-    // ],
   });
 
   // initially select today's date
@@ -115,9 +94,6 @@ const HomeScreen = () => {
   const leaveApplyHandler = date => {
     customNavigation.navigate('applyLeave', {
       date: date.dateString,
-      // holidaysList: commObj.holidaysList,
-      // minDate: commObj.minDate,
-      // maxDate: commObj.maxDate,
     });
   };
 
@@ -142,37 +118,6 @@ const HomeScreen = () => {
       </View>
     </TouchableWithoutFeedback>
   );
-
-  // dynamic min and max dates logic
-  // useEffect(() => {
-  //   minMaxDateHandler();
-  // }, []);
-
-  // function minMaxDateHandler() {
-  //   let todayDate = moment(new Date()).format('YYYY-MM-DD');
-  //   const endMonth = moment().month('March').format('MM');
-  //   const startMonth = moment().month('April').format('MM');
-
-  //   if (moment(todayDate).format('MM') >= startMonth) {
-  //     let year = moment(todayDate).format('YYYY');
-  //     let year2 = moment(todayDate).add(1, 'year').format('YYYY');
-  //     setCommObj(prev => ({
-  //       ...prev,
-  //       minDate: `${year}-${startMonth}-01`,
-  //       maxDate: `${year2}-${endMonth}-31`,
-  //     }));
-  //   }
-
-  //   if (endMonth >= moment(todayDate).format('MM')) {
-  //     let year = moment(todayDate).format('YYYY');
-  //     let year2 = moment(todayDate).subtract(1, 'year').format('YYYY');
-  //     setCommObj(prev => ({
-  //       ...prev,
-  //       minDate: `${year2}-${startMonth}-01`,
-  //       maxDate: `${year}-${endMonth}-31`,
-  //     }));
-  //   }
-  // }
 
   useEffect(() => {
     console.log('Home-commObj------->', commObj);
