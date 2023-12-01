@@ -31,17 +31,15 @@ const App = () => {
       },
     ],
   });
-
   useEffect(() => {
-    console.log('App.js------->');
     minMaxDateHandler();
   }, []);
 
   function minMaxDateHandler() {
     let todayDate = moment(new Date()).format('YYYY-MM-DD');
     let commonYear = moment(todayDate).format('YYYY');
-    const endMonth = '03';
-    const startMonth = '04';
+    let endMonth = '03';
+    let startMonth = '04';
     let minYear =
       moment(todayDate).format('MM') >= startMonth
         ? commonYear
