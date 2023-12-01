@@ -24,7 +24,7 @@ const ApplyLeaveScreen = props => {
     formDatePicker: false,
     toDatePicker: false,
     maxDate: null,
-    leaveData: null,
+    leaveData: [],
   });
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const ApplyLeaveScreen = props => {
     let data = JSON.parse(leaveData);
     setCommObj(prev => ({
       ...prev,
-      leaveData: data,
+      leaveData: data !== null ? data : [],
     }));
   };
 

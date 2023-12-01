@@ -57,7 +57,7 @@ const HomeScreen = () => {
         ...prev,
         selectadDate: months[0]?.dateString,
       }));
-    }, 20),
+    }, 10),
     [],
   );
 
@@ -160,31 +160,38 @@ const HomeScreen = () => {
             //   <CustomDayComponent date={date} state={state} />
             // )}
             dayComponent={({date, state}) => {
-              let marked = false;
-              let start = false;
-              let end = false;
-              let dd = moment(date.dateString).format('ddd');
-              let holiday = false;
+              let highlighted = {
+                marked: false,
+                start: false,
+                end: false,
+                dd: moment(date.dateString).format('ddd'),
+                holiday: false,
+              };
+              // let marked = false;
+              // let start = false;
+              // let end = false;
+              // let dd = moment(date.dateString).format('ddd');
+              // let holiday = false;
               if (commObj.dataInfo) {
                 commObj.dataInfo.forEach(item => {
                   if (
                     item.fromDate <= date.dateString &&
                     date.dateString <= item.toDate
                   ) {
-                    marked = true;
+                    highlighted.marked = true;
                   }
                   if (item.fromDate === date.dateString) {
-                    start = true;
+                    highlighted.start = true;
                   }
                   if (item.toDate === date.dateString) {
-                    end = true;
+                    highlighted.end = true;
                   }
                 });
               }
               if (globalData.holidaysList) {
                 globalData.holidaysList.forEach(item => {
                   if (item.date === date.dateString) {
-                    holiday = true;
+                    highlighted.holiday = true;
                   }
                 });
               }
@@ -197,10 +204,10 @@ const HomeScreen = () => {
                     }));
                     console.log('date---->', date);
                     if (
-                      !holiday &&
-                      dd !== 'Sun' &&
-                      dd !== 'Sat' &&
-                      !marked &&
+                      !highlighted.holiday &&
+                      highlighted.dd !== 'Sun' &&
+                      highlighted.dd !== 'Sat' &&
+                      !highlighted.marked &&
                       state !== 'disabled'
                     ) {
                       leaveApplyHandler(date);
@@ -210,7 +217,7 @@ const HomeScreen = () => {
                     style={{
                       width: '100%',
                       height: 40,
-                      backgroundColor: marked
+                      backgroundColor: highlighted.marked
                         ? state === 'disabled'
                           ? ''
                           : 'lightblue'
@@ -218,17 +225,17 @@ const HomeScreen = () => {
                         ? 'lightgreen'
                         : '',
                       borderTopLeftRadius:
-                        start || state === 'today' ? 40 / 2 : 0,
+                        highlighted.start || state === 'today' ? 40 / 2 : 0,
                       borderBottomLeftRadius:
-                        start || state === 'today' ? 40 / 2 : 0,
+                        highlighted.start || state === 'today' ? 40 / 2 : 0,
                       borderTopRightRadius:
-                        end || state === 'today' ? 40 / 2 : 0,
+                        highlighted.end || state === 'today' ? 40 / 2 : 0,
                       borderBottomRightRadius:
-                        end || state === 'today' ? 40 / 2 : 0,
+                        highlighted.end || state === 'today' ? 40 / 2 : 0,
                       justifyContent: 'center',
                       alignItems: 'center',
                     }}>
-                    {dd === 'Sun' || dd === 'Sat' ? (
+                    {highlighted.dd === 'Sun' || highlighted.dd === 'Sat' ? (
                       <Text
                         style={{
                           textAlign: 'center',
@@ -243,7 +250,7 @@ const HomeScreen = () => {
                           color:
                             state === 'disabled'
                               ? 'lightgray'
-                              : holiday
+                              : highlighted.holiday
                               ? 'red'
                               : 'black',
                         }}>
