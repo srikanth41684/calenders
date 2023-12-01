@@ -160,7 +160,6 @@ const HomeScreen = () => {
             //   <CustomDayComponent date={date} state={state} />
             // )}
             dayComponent={({date, state}) => {
-              console.log('dayComponent');
               let marked = false;
               let start = false;
               let end = false;

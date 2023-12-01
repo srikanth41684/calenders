@@ -20,9 +20,9 @@ const ApplyLeaveScreen = props => {
     fromDate: new Date(props.route.params.date),
     toDate: new Date(props.route.params.date),
     reason: '',
+    numberOfDays: 0,
     formDatePicker: false,
     toDatePicker: false,
-    numberOfDays: 0,
     leaveStartDates: null,
     maxDate: null,
     leaveData: null,
@@ -33,47 +33,48 @@ const ApplyLeaveScreen = props => {
   }, []);
 
   const getLeaveDataHandler = async () => {
-    let tempArr = [];
     let leaveData = await AsyncStorage.getItem('apply-leave');
     let data = JSON.parse(leaveData);
-    if (data) {
-      data.filter(item => {
-        tempArr.push(item.fromDate);
-      });
-      setCommObj(prev => ({
-        ...prev,
-        leaveData: data,
-      }));
-    }
     setCommObj(prev => ({
       ...prev,
-      leaveStartDates: tempArr,
+      leaveData: data,
     }));
   };
 
+  // const getLeaveDataHandler = async () => {
+  //   let tempArr = [];
+  //   let leaveData = await AsyncStorage.getItem('apply-leave');
+  //   let data = JSON.parse(leaveData);
+  //   if (data) {
+  //     data.filter(item => {
+  //       tempArr.push(item.fromDate);
+  //     });
+  //     setCommObj(prev => ({
+  //       ...prev,
+  //       leaveData: data,
+  //     }));
+  //   }
+  //   setCommObj(prev => ({
+  //     ...prev,
+  //     leaveStartDates: tempArr,
+  //     leaveData: data,
+  //   }));
+  // };
+
   const applyLeaveHandler = async () => {
-    let array = [
-      {
-        fromDate: moment(commObj.fromDate).format('YYYY-MM-DD'),
-        toDate: moment(commObj.toDate).format('YYYY-MM-DD'),
-        reason: commObj.reason,
-        numberOfDays: commObj.numberOfDays,
-      },
-    ];
-    // let leaveData = await AsyncStorage.getItem('apply-leave');
-    // let data = JSON.parse(leaveData);
-    if (commObj.leaveData) {
-      commObj.leaveData.forEach(item => {
-        array.push(item);
-      });
+    let obj = {
+      fromDate: moment(commObj.fromDate).format('YYYY-MM-DD'),
+      toDate: moment(commObj.toDate).format('YYYY-MM-DD'),
+      reason: commObj.reason,
+      numberOfDays: commObj.numberOfDays,
+    };
+    if (obj.reason !== '' && obj.numberOfDays > 0) {
+      commObj.leaveData.push(obj);
     }
-    let sortedDates;
-    if (array) {
-      sortedDates = array.sort(
-        (a, b) => new Date(a.fromDate) - new Date(b.fromDate),
-      );
-    }
-    console.log('sortedDates------->', sortedDates);
+
+    let sortedDates = commObj.leaveData.sort(
+      (a, b) => new Date(a.fromDate) - new Date(b.fromDate),
+    );
 
     await AsyncStorage.setItem('apply-leave', JSON.stringify(sortedDates));
     setCommObj(prev => ({
@@ -82,6 +83,38 @@ const ApplyLeaveScreen = props => {
     }));
     customNavigation.goBack();
   };
+
+  // const applyLeaveHandler = async () => {
+  //   let array = [
+  //     {
+  //       fromDate: moment(commObj.fromDate).format('YYYY-MM-DD'),
+  //       toDate: moment(commObj.toDate).format('YYYY-MM-DD'),
+  //       reason: commObj.reason,
+  //       numberOfDays: commObj.numberOfDays,
+  //     },
+  //   ];
+  //   // let leaveData = await AsyncStorage.getItem('apply-leave');
+  //   // let data = JSON.parse(leaveData);
+  //   if (commObj.leaveData) {
+  //     commObj.leaveData.forEach(item => {
+  //       array.push(item);
+  //     });
+  //   }
+  //   let sortedDates;
+  //   if (array) {
+  //     sortedDates = array.sort(
+  //       (a, b) => new Date(a.fromDate) - new Date(b.fromDate),
+  //     );
+  //   }
+  //   console.log('sortedDates------->', sortedDates);
+
+  //   await AsyncStorage.setItem('apply-leave', JSON.stringify(sortedDates));
+  //   setCommObj(prev => ({
+  //     ...prev,
+  //     reason: '',
+  //   }));
+  //   customNavigation.goBack();
+  // };
 
   useEffect(() => {
     const startDate = commObj.fromDate;
@@ -120,26 +153,43 @@ const ApplyLeaveScreen = props => {
   }, [commObj.fromDate, commObj.toDate]);
 
   useEffect(() => {
-    if (commObj.leaveStartDates) {
+    if (commObj.leaveData) {
       let myDate = moment(commObj.fromDate).format('YYYY-MM-DD');
-      let leaveDates = commObj.leaveStartDates;
-
-      let arr = [];
-      if (leaveDates) {
-        leaveDates.filter(item => {
-          if (item >= myDate) {
-            arr.push(item);
-          }
-        });
-      }
-      if (arr) {
-        setCommObj(prev => ({
-          ...prev,
-          maxDate: arr[0],
-        }));
+      for (let i = 0; commObj.leaveData.length > i; i++) {
+        if (commObj.leaveData[i].fromDate >= myDate) {
+          setCommObj(prev => ({
+            ...prev,
+            maxDate: commObj.leaveData[i].fromDate,
+          }));
+          break;
+        } else {
+          setCommObj(prev => ({
+            ...prev,
+            maxDate: null,
+          }));
+        }
       }
     }
-  }, [commObj.fromDate, commObj.leaveStartDates]);
+    // if (commObj.leaveStartDates) {
+    //   let myDate = moment(commObj.fromDate).format('YYYY-MM-DD');
+    //   let leaveDates = commObj.leaveStartDates;
+
+    //   let arr = [];
+    //   if (leaveDates) {
+    //     leaveDates.filter(item => {
+    //       if (item >= myDate) {
+    //         arr.push(item);
+    //       }
+    //     });
+    //   }
+    //   if (arr) {
+    // setCommObj(prev => ({
+    //   ...prev,
+    //   maxDate: arr[0],
+    // }));
+    //   }
+    // }
+  }, [commObj.fromDate, commObj.leaveData]);
 
   useEffect(() => {
     console.log('TopTabNav commObj-------->', commObj);
