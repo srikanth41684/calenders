@@ -129,28 +129,54 @@ const ApplyLeaveScreen = props => {
       resultDates.push(moment(new Date(currentDate)).format('YYYY-MM-DD'));
     }
 
-    let newArr = [];
-    let dates = [];
-    globalData.holidaysList.forEach(res => {
-      dates.push(res.date);
-    });
-    if (resultDates) {
-      resultDates.forEach(item => {
-        if (
-          moment(item).format('ddd') !== 'Sun' &&
-          moment(item).format('ddd') !== 'Sat'
-        ) {
-          if (!dates.includes(item)) {
-            newArr.push(item);
-          }
-        }
-      });
-    }
+    let newArr = resultDates.filter(
+      item =>
+        moment(item).format('ddd') !== 'Sun' &&
+        moment(item).format('ddd') !== 'Sat' &&
+        !globalData.holidaysList.map(holiday => holiday.date).includes(item),
+    );
+
     setCommObj(prev => ({
       ...prev,
       numberOfDays: newArr.length,
     }));
   }, [commObj.fromDate, commObj.toDate]);
+
+  // useEffect(() => {
+  //   const startDate = commObj.fromDate;
+  //   const endDate = commObj.toDate;
+
+  //   const resultDates = [];
+  //   for (
+  //     let currentDate = new Date(startDate);
+  //     currentDate <= endDate;
+  //     currentDate.setDate(currentDate.getDate() + 1)
+  //   ) {
+  //     resultDates.push(moment(new Date(currentDate)).format('YYYY-MM-DD'));
+  //   }
+
+  //   let newArr = [];
+  //   let dates = [];
+  //   globalData.holidaysList.forEach(res => {
+  //     dates.push(res.date);
+  //   });
+  //   if (resultDates) {
+  //     resultDates.forEach(item => {
+  //       if (
+  //         moment(item).format('ddd') !== 'Sun' &&
+  //         moment(item).format('ddd') !== 'Sat'
+  //       ) {
+  //         if (!dates.includes(item)) {
+  //           newArr.push(item);
+  //         }
+  //       }
+  //     });
+  //   }
+  //   setCommObj(prev => ({
+  //     ...prev,
+  //     numberOfDays: newArr.length,
+  //   }));
+  // }, [commObj.fromDate, commObj.toDate]);
 
   useEffect(() => {
     if (commObj.leaveData) {

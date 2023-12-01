@@ -20,6 +20,10 @@ const App = () => {
         title: 'Holiday3',
       },
       {
+        date: '2023-12-25',
+        title: 'New Year',
+      },
+      {
         date: '2024-01-01',
         title: 'New Year',
       },
