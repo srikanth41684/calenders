@@ -38,29 +38,53 @@ const App = () => {
 
   function minMaxDateHandler() {
     let todayDate = moment(new Date()).format('YYYY-MM-DD');
-    const endMonth = moment().month('March').format('MM');
-    const startMonth = moment().month('April').format('MM');
-
-    if (moment(todayDate).format('MM') >= startMonth) {
-      let year = moment(todayDate).format('YYYY');
-      let year2 = moment(todayDate).add(1, 'year').format('YYYY');
-      setGlobalDate(prev => ({
-        ...prev,
-        minDate: `${year}-${startMonth}-01`,
-        maxDate: `${year2}-${endMonth}-31`,
-      }));
-    }
-
-    if (endMonth >= moment(todayDate).format('MM')) {
-      let year = moment(todayDate).format('YYYY');
-      let year2 = moment(todayDate).subtract(1, 'year').format('YYYY');
-      setGlobalDate(prev => ({
-        ...prev,
-        minDate: `${year2}-${startMonth}-01`,
-        maxDate: `${year}-${endMonth}-31`,
-      }));
-    }
+    let commonYear = moment(todayDate).format('YYYY');
+    const endMonth = '03';
+    const startMonth = '04';
+    let minYear =
+      moment(todayDate).format('MM') >= startMonth
+        ? commonYear
+        : moment(todayDate).subtract(1, 'year').format('YYYY');
+    let maxYear =
+      moment(todayDate).format('MM') >= startMonth
+        ? moment(todayDate).add(1, 'year').format('YYYY')
+        : commonYear;
+    setGlobalDate(prev => ({
+      ...prev,
+      minDate: `${minYear}-${startMonth}-01`,
+      maxDate: `${maxYear}-${endMonth}-31`,
+    }));
   }
+
+  useEffect(() => {
+    console.log('globalData==========>', globalData);
+  }, [globalData]);
+
+  // function minMaxDateHandler() {
+  //   let todayDate = moment(new Date()).format('YYYY-MM-DD');
+  //   const endMonth = moment().month('March').format('MM');
+  //   const startMonth = moment().month('April').format('MM');
+
+  //   if (moment(todayDate).format('MM') >= startMonth) {
+  //     let year = moment(todayDate).format('YYYY');
+  //     let year2 = moment(todayDate).add(1, 'year').format('YYYY');
+  //     setGlobalDate(prev => ({
+  //       ...prev,
+  //       minDate: `${year}-${startMonth}-01`,
+  //       maxDate: `${year2}-${endMonth}-31`,
+  //     }));
+  //   }
+
+  //   if (endMonth >= moment(todayDate).format('MM')) {
+  //     let year = moment(todayDate).format('YYYY');
+  //     let year2 = moment(todayDate).subtract(1, 'year').format('YYYY');
+  //     setGlobalDate(prev => ({
+  //       ...prev,
+  //       minDate: `${year2}-${startMonth}-01`,
+  //       maxDate: `${year}-${endMonth}-31`,
+  //     }));
+  //   }
+  // }
   return (
     <AppContext.Provider value={{globalData, setGlobalDate}}>
       <NavigationContainer>
