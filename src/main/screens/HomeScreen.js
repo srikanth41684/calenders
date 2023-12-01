@@ -136,7 +136,7 @@ const HomeScreen = () => {
   );
 
   useEffect(() => {
-    console.log('Home-commObj------->', commObj);
+    console.log('HomeScreen-commObj------->', commObj);
   }, [commObj]);
   return (
     <SafeAreaView

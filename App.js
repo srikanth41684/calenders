@@ -6,6 +6,8 @@ import moment from 'moment';
 
 const App = () => {
   const [globalData, setGlobalDate] = useState({
+    minDate: null,
+    maxDate: null,
     holidaysList: [
       {
         date: '2023-11-14',
@@ -28,11 +30,10 @@ const App = () => {
         title: 'New Year',
       },
     ],
-    minDate: null,
-    maxDate: null,
   });
 
   useEffect(() => {
+    console.log('App.js------->');
     minMaxDateHandler();
   }, []);
 
@@ -49,6 +50,7 @@ const App = () => {
       moment(todayDate).format('MM') >= startMonth
         ? moment(todayDate).add(1, 'year').format('YYYY')
         : commonYear;
+
     setGlobalDate(prev => ({
       ...prev,
       minDate: `${minYear}-${startMonth}-01`,

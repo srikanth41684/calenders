@@ -23,7 +23,6 @@ const ApplyLeaveScreen = props => {
     numberOfDays: 0,
     formDatePicker: false,
     toDatePicker: false,
-    leaveStartDates: null,
     maxDate: null,
     leaveData: null,
   });
