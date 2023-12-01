@@ -55,7 +55,7 @@ const HomeScreen = () => {
     debounce(months => {
       setCommObj(prev => ({
         ...prev,
-        selectadDate: months[0]?.dateString,
+        selectadDate: months.dateString,
       }));
     }, 10),
     [],
@@ -288,7 +288,11 @@ const HomeScreen = () => {
             }
             renderHeader={customHeader}
             enableSwipeMonths={true}
-            onVisibleMonthsChange={handleVisibleMonthsChange}
+            onMonthChange={month => {
+              if (commObj.selectadDate !== month.dateString) {
+                handleVisibleMonthsChange(month);
+              }
+            }}
           />
         </View>
         <TouchableWithoutFeedback
