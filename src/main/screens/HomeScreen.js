@@ -25,7 +25,6 @@ const HomeScreen = () => {
     changedMonth: null,
     changedYear: null,
     dataInfo: null,
-    markedDates: null,
     modalVisible: false,
   });
 
@@ -161,13 +160,14 @@ const HomeScreen = () => {
             //   <CustomDayComponent date={date} state={state} />
             // )}
             dayComponent={({date, state}) => {
+              console.log('dayComponent');
               let marked = false;
               let start = false;
               let end = false;
               let dd = moment(date.dateString).format('ddd');
               let holiday = false;
-              if (commObj.markedDates) {
-                commObj.markedDates.forEach(item => {
+              if (commObj.dataInfo) {
+                commObj.dataInfo.forEach(item => {
                   if (
                     item.fromDate <= date.dateString &&
                     date.dateString <= item.toDate
